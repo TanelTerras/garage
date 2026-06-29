@@ -16,15 +16,39 @@
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "e0f504df-f825-4182-89dc-779b1454eecc",
-      });
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  
+  // Initialize OneSignal with explicit paths for your Netlify root layout
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "e0f504df-f825-4182-89dc-779b1454eecc",
+      serviceWorkerPath: "OneSignalSDKWorker.js",
+      serviceWorkerParam: { scope: "/" }
     });
-  </script>
+    
+    console.log("OneSignal v16 initialized successfully.");
+  });
+
+  // The click handler for your HTML button to wake up iOS permissions
+  async function triggerSubscription() {
+    console.log("Button clicked, invoking OneSignal...");
+    
+    window.OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        // Forces iOS to show the native alert pop-up
+        await OneSignal.Notifications.requestPermission();
+        console.log("Permission request completed.");
+      } catch (error) {
+        console.error("OneSignal permission error:", error);
+      }
+    });
+  }
+</script>
 </head>
 <body>
   <h1>Garage</h1>
+  <button onclick="triggerSubscription()" style="padding: 15px 25px; font-size: 16px;">
+  Enable Garage Alerts
+</button>
 </body>
 </html>
