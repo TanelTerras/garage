@@ -2,6 +2,7 @@
   "name": "Garage Alerts",
   "short_name": "Garage",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "icons": [
     {
