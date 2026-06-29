@@ -16,46 +16,12 @@
   </style>
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
  <script>
-  // Ensure the deferred tracking array is present
   window.OneSignalDeferred = window.OneSignalDeferred || [];
-  
-  // Clean initialization sequence at the root scope
   OneSignalDeferred.push(async function(OneSignal) {
-    console.log("OneSignal Booting...");
     await OneSignal.init({
       appId: "e0f504df-f825-4182-89dc-779b1454eecc",
-      serviceWorkerPath: "OneSignalSDKWorker.js",
-      serviceWorkerParam: { scope: "/" },
-      allowLocalhostAsSecureOrigin: true
     });
-    console.log("OneSignal Booted Successfully.");
   });
-
-  // Modern Explicit v16 Event Handler
-  async function triggerSubscription() {
-    console.log("Button clicked, checking window context...");
-    
-    // Safely look up the loaded instance directly rather than pushing to a dead queue
-    const OneSignalInstance = window.OneSignal;
-    
-    if (!OneSignalInstance) {
-      console.error("Critical Error: OneSignal SDK failed to attach to window object.");
-      alert("SDK still loading... Please wait a moment.");
-      return;
-    }
-
-    try {
-      console.log("Current Context State:", OneSignalInstance.Notifications.permission);
-      console.log("Invoking native engine...");
-      
-      // Request permission natively
-      await OneSignalInstance.Notifications.requestPermission();
-      
-      console.log("Finished invocation sweep.");
-    } catch (error) {
-      console.error("Native push error caught:", error);
-    }
-  }
 </script>
 </head>
 <body>
